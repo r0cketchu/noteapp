@@ -4,7 +4,7 @@ import { DeleteBox, FixedContainer } from '../Modal.styles';
 import { Box, StyledInput, TagsBox } from './TagModal.styles';
 import { toggleTagsModal } from '../../../store/modal/modalSlice';
 import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
-import { FaTimes } from 'react-icons/fa';
+import { FaTimes, FaPlus, FaMinus } from 'react-icons/fa';
 import getStandardName from '../../../utils/getStandardName';
 import { v4 } from 'uuid';
 import { addTags, deleteTags } from '../../../store/tags/tagsSlice';
@@ -16,7 +16,7 @@ interface TagsModalProps {
   handleTags?: (tag: string, type: string) => void;
 }
 
-const TagsModal: FC<TagsModalProps> = ({ type, addedTags, handleTags }: TagsModalProps) => {
+const TagsModal: FC<TagsModalProps> = ({ type, addedTags, handleTags }) => {
   const dispatch = useAppDispatch();
   const { tagsList } = useAppSelector((state) => state.tags);
   const [inputText, setInputText] = useState('');
@@ -41,7 +41,7 @@ const TagsModal: FC<TagsModalProps> = ({ type, addedTags, handleTags }: TagsModa
       <Box>
         <div className="editTags_header">
           <div className="editTags_title">
-            {type === "add" ? "Add" : "Edit"} Tags
+            {type === "add" ? "태그 추가" : "태그 편집"}
           </div>
           <DeleteBox
             className="editTags_close"
@@ -55,7 +55,7 @@ const TagsModal: FC<TagsModalProps> = ({ type, addedTags, handleTags }: TagsModa
           <StyledInput
             type="text"
             value={inputText}
-            placeholder="New Tag .. "
+            placeholder="새 태그 입력..."
             onChange={(e) => setInputText(e.target.value)}
           />
         </form>
@@ -63,9 +63,19 @@ const TagsModal: FC<TagsModalProps> = ({ type, addedTags, handleTags }: TagsModa
           {tagsList.map(({ tag, id }) => (
             <li key={id}>
               <div className="editTags_tag">{getStandardName(tag)}</div>
-              <DeleteBox onClick={() => deleteTagsHandler(tag, id)}>
-                <FaTimes />
-              </DeleteBox>
+              {type === 'edit' ? (
+                <DeleteBox onClick={() => deleteTagsHandler(tag, id)}>
+                  <FaTimes />
+                </DeleteBox>
+              ) : (
+                <DeleteBox>
+                  {addedTags?.find((addedTag: Tag) => addedTag.tag === tag.toLowerCase()) ? (
+                    <FaMinus onClick={() => handleTags!(tag, 'remove')} />
+                  ) : (
+                    <FaPlus onClick={() => handleTags!(tag, 'add')} />
+                  )}
+                </DeleteBox>
+              )}
             </li>
           ))}
         </TagsBox>

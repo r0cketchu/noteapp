@@ -2,16 +2,34 @@ import React, { useState } from 'react';
 import { ButtonOutline, Container, EmptyMsgBox} from '../../styles/styles';
 import { useAppSelector, useAppDispatch } from '../../hooks/redux';
 import { toggleFiltersModal } from '../../store/modal/modalSlice';
-import { InputBox, TopBox } from './AllNotes.styles';
+import { Box, InputBox, TopBox } from './AllNotes.styles';
+import getAllNotes from '../../utils/getAllNotes';
+import { FiltersModal } from '../../components';
 
 const AllNotes = () => {
   const { mainNotes } = useAppSelector((state) => state.notesList);
   const [searchInput, setSearchInput] = useState('');
   const [filter, setFilter] = useState('');
   const dispatch = useAppDispatch();
+  const { viewFiltersModal } = useAppSelector((state) => state.modal);
+
+  const filterHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilter(e.target.value);
+  }
+
+  const clearHandler = () => {
+    setFilter("");
+  }
 
   return (
-    <Container>
+      <Container>
+      {viewFiltersModal && (
+        <FiltersModal
+          handleFilter={filterHandler}
+          handleClear={clearHandler}
+          filter={filter}
+        />
+      )}
       {mainNotes.length === 0 ? (
         <EmptyMsgBox>노트가 없습니다.</EmptyMsgBox>
       ) : (

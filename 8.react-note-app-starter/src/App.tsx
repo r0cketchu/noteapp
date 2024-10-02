@@ -1,5 +1,5 @@
 import './App.css';
-import { TagsModal } from './components';
+import { CreateNoteModal, TagsModal } from './components';
 import { useAppSelector } from './hooks/redux';
 import { Sidebar, Navbar } from './layout';
 import { AllNotes, ArchiveNotes, TrashNotes, TagNotes, ErrorPage } from './pages'; 
@@ -14,7 +14,7 @@ const App = () => {
 
   return (
     <div className="app">
-      {viewEditTagsModal && <TagsModal type='edit' />}
+      {viewEditTagsModal && <CreateNoteModal />}
       <ToastContainer 
       position="bottom-right"
       theme='light'

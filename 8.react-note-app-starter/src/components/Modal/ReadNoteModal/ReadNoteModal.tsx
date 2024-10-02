@@ -1,6 +1,7 @@
 import React from 'react'
 import { Note } from '../../../types/note'
 import { DeleteBox, FixedContainer } from '../Modal.styles';
+import parse from 'html-react-parser';
 
 interface ReadNoteModalProps {
   note: Note;
@@ -16,4 +17,4 @@ const ReadNoteModal = ({ note, type }: ReadNoteModalProps) => {
   )
 }
 
-export default ReadNoteModal
+export default ReadNoteModal;
